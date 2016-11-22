@@ -5,10 +5,18 @@ require 'byebug'
 class Board
   attr_reader :grid, :null_piece
 
-  def initialize
-    @grid = Array.new(8) { Array.new }
+  def initialize(grid = default_grid)
+    @grid = grid
     @null_piece = NullPiece.instance
-    populate
+    populate if grid == default_grid
+  end
+
+  def default_grid
+    Array.new(8) { Array.new }
+  end
+
+  def set_grid(grid)
+    @grid = grid
   end
 
   def populate
@@ -66,13 +74,13 @@ class Board
     end
   end
 
-  # def checkmate?(color)
-  #   return false unless in_check?(color)
-  #   own_pieces = search(Piece, color)
-  #   own_pieces.any? do |piece|
-  #     self[piece].valid_moves
-  #   end
-  # end
+  def checkmate?(color)
+    return false unless in_check?(color)
+    own_pieces = search(Piece, color)
+    own_pieces.all? do |piece|
+      self[piece].valid_moves.empty?
+    end
+  end
 
   def search(piece_type, color)
     found_pos = []
@@ -86,6 +94,24 @@ class Board
     end
 
     found_pos
+  end
+
+  def dup
+    b = Board.new
+
+    duped_grid = @grid.map do |row|
+      row.map do |piece|
+        if piece.is_a?(NullPiece)
+          @null_piece
+        else
+          piece.class.new(piece.pos, b, piece.color)
+        end
+      end
+    end
+
+    # update board w/ new grid
+    b.set_grid(duped_grid)
+    b
   end
 
   def [](pos)
@@ -102,14 +128,13 @@ end
 if __FILE__ == $0
   b = Board.new
   d = Display.new(b)
-  d.render
-  # d.display_loop
-  b.move_piece([6, 3], [4, 3])
-  b.move_piece([1, 4], [3, 4])
-  b.move_piece([0, 1], [2, 2])
-  #b.move_piece([0, 5], [4, 1])
-  d.render
-  p b.in_check?(:black)
 
-
+  # d.render
+  # b.move_piece([6, 5], [5, 5])
+  # b.move_piece([1, 4], [3, 4])
+  # b.move_piece([6, 6], [4, 6])
+  # b.move_piece([0, 3], [4, 7])
+  # d.render
+  # p b.checkmate?(:black)
+  # p b.in_check?(:black)
 end
