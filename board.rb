@@ -52,13 +52,22 @@ class Board
     row
   end
 
-  def move_piece(start_pos, end_pos)
+  def move_piece!(start_pos, end_pos)
     raise if self[start_pos] == @null_piece || !in_bounds?(end_pos)
     self[end_pos] = self[start_pos]
     self[end_pos].pos = end_pos
     self[start_pos] = @null_piece
   rescue
     puts "Invalid position."
+  end
+
+  def move_piece(start_pos, end_pos)
+    valid = self[start_pos].valid_moves.include?(end_pos)
+    raise unless valid
+    move_piece!(start_pos, end_pos)
+  rescue
+    puts "Move places you in check."
+    puts "Try again."
   end
 
   def in_bounds?(pos)
@@ -128,6 +137,7 @@ end
 if __FILE__ == $0
   b = Board.new
   d = Display.new(b)
+  d.render
 
   # d.render
   # b.move_piece([6, 5], [5, 5])

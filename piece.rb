@@ -36,7 +36,7 @@ class Piece
     new_board = @board.dup
 
     ##Perform the move
-    new_board.move_piece(@pos, end_pos)
+    new_board.move_piece!(@pos, end_pos)
 
     ##See if player is in check
     new_board.in_check?(@color)
