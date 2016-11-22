@@ -15,7 +15,7 @@ class Display
     8.times { |x| header << " #{x} " }
     puts header
 
-    @board.board.each_with_index do |row, row_idx|
+    @board.grid.each_with_index do |row, row_idx|
       print "#{row_idx} "
       row.each_with_index do |piece, col_idx|
         if @cursor.cursor_pos == [row_idx, col_idx]

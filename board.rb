@@ -2,22 +2,22 @@ require_relative 'piece'
 require_relative 'display'
 
 class Board
-  attr_reader :board, :null_piece
+  attr_reader :grid, :null_piece
 
   def initialize
-    @board = Array.new(8) { Array.new }
+    @grid = Array.new(8) { Array.new }
     @null_piece = NullPiece.instance
     populate
   end
 
   def populate
-    @board[0] = back_row(:white)
-    @board[1] = pawn_row(:white)
+    @grid[0] = back_row(:white)
+    @grid[1] = pawn_row(:white)
 
-    2.upto(5) { |idx| 8.times { @board[idx] << @null_piece } }
+    2.upto(5) { |idx| 8.times { @grid[idx] << @null_piece } }
 
-    @board[6] = pawn_row(:black)
-    @board[7] = back_row(:black)
+    @grid[6] = pawn_row(:black)
+    @grid[7] = back_row(:black)
   end
 
   def back_row(color)
@@ -45,11 +45,11 @@ class Board
 
   def move_piece(start_pos, end_pos)
     raise if self[start_pos] == @null_piece || !in_bounds?(end_pos)
+    self[end_pos] = self[start_pos]
+    self[end_pos].pos = end_pos
+    self[start_pos] = @null_piece
   rescue
     puts "Invalid position."
-
-    self[end_pos] = self[start_pos]
-    self[start_pos] = @null_piece
   end
 
   def in_bounds?(pos)
@@ -58,20 +58,25 @@ class Board
 
   def [](pos)
     row, col = pos
-    @board[row][col]
+    @grid[row][col]
   end
 
   def []=(pos, mark)
     row, col = pos
-    @board[row][col] = mark
+    @grid[row][col] = mark
   end
 end
 
 if __FILE__ == $0
   b = Board.new
   d = Display.new(b)
-  #d.display_loop
-  p b[[7, 1]].moves
+  d.render
+  # d.display_loop
+  b.move_piece([6, 3], [4, 3])
+  b.move_piece([1, 4], [3, 4])
+  b.move_piece([0, 1], [2, 2])
+  d.render
+  p b[[2, 2]].moves
 
 
 end

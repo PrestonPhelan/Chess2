@@ -1,9 +1,10 @@
 require_relative 'board'
 require 'singleton'
+require 'byebug'
 require_relative 'piece_modules'
 
 class Piece
-  attr_reader :sym
+  attr_reader :sym, :color
   attr_accessor :pos
 
   def initialize(pos, board, color = :white)
@@ -15,6 +16,10 @@ class Piece
 
   def moves
 
+  end
+
+  def other_color
+    @color == :white ? :black : :white
   end
 end
 
@@ -116,6 +121,17 @@ class Pawn < Piece
   end
 
   def moves
-    [@pos[0] + move_dirs[0], @pos[1] + move_dirs[1]]
+    arr = [[@pos[0] + move_dirs[0], @pos[1] + move_dirs[1]]]
+    side_attacks.each { |attack| arr << attack }
+    arr
+  end
+
+  def side_attacks
+    direction = move_dirs.first
+    check_pos = [[@pos[0] + direction, @pos[1]-1], [@pos[0] + direction, @pos[1]+1]]
+    #debugger
+    check_pos.select do |pos|
+      @board.in_bounds?(pos) && @board[pos].color == other_color
+    end
   end
 end

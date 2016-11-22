@@ -1,3 +1,5 @@
+require 'byebug'
+
 
 module SlidingPiece
   DIAG_MOVES = {
@@ -23,11 +25,14 @@ module SlidingPiece
 
       loop do
         new_pos = [@pos[0] + v[0] * i, @pos[1] + v[1] * i]
-        # if board[new_pos] == opposing_piece
-        # => add to possible_moves
-        # => break
+        # debugger
 
-        if @board.in_bounds?(new_pos) && @board[new_pos] == @board.null_piece
+        break unless @board.in_bounds?(new_pos)
+
+        if @board[new_pos].color == other_color
+          possible_moves << new_pos
+          break
+        elsif @board[new_pos] == @board.null_piece
           possible_moves << new_pos
           i += 1
         else
@@ -47,7 +52,10 @@ module SteppingPiece
 
     move_dirs.each do |v|
       new_pos = [@pos[0] + v[0], @pos[1] + v[1]]
-      if @board.in_bounds?(new_pos) && @board[new_pos] == @board.null_piece
+
+      next unless @board.in_bounds?(new_pos)
+
+      if @board[new_pos] == @board.null_piece || @board[new_pos].color == other_color
         possible_moves << new_pos
       end
     end
