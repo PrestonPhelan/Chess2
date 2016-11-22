@@ -4,7 +4,7 @@ require_relative 'board'
 require 'byebug'
 
 class Display
-  attr_reader :cursor
+  attr_reader :cursor, :board
 
   def initialize(board)
     @board = board

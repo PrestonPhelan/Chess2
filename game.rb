@@ -3,18 +3,20 @@ require_relative 'board'
 
 class Game
 
-  def initialize(name1, name2)
+  def initialize(name1 = "White", name2 = "Black")
     @board = Board.new
     @display = Display.new(@board)
 
     @player1 = HumanPlayer.new(name1, @display, :white)
-    @player2 = HumanPlayer.new(name2, @display, :black)
+    @player2 = ComputerPlayer.new(name2, @display, :black)
     @current_player = @player1
   end
 
   def play
     until game_over?
       begin
+        # debugger
+
         positions = @current_player.play_turn
 
         raise unless @board[positions[0]].color == @current_player.color
@@ -46,5 +48,5 @@ class Game
 end
 
 if __FILE__ == $0
-  Game.new("1", "2").play
+  Game.new.play
 end
