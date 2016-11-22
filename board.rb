@@ -63,11 +63,8 @@ class Board
 
   def move_piece(start_pos, end_pos)
     valid = self[start_pos].valid_moves.include?(end_pos)
-    raise unless valid
+    raise ArgumentError unless valid
     move_piece!(start_pos, end_pos)
-  rescue
-    puts "Move places you in check."
-    puts "Try again."
   end
 
   def in_bounds?(pos)
