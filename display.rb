@@ -29,6 +29,8 @@ class Display
 
       puts
     end
+
+    nil
   end
 
   def display_loop
