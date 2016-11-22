@@ -1,5 +1,6 @@
 require_relative 'piece'
 require_relative 'display'
+require 'byebug'
 
 class Board
   attr_reader :grid, :null_piece
@@ -56,6 +57,37 @@ class Board
     pos.all? { |coord| coord >= 0 && coord <= 7 }
   end
 
+  def in_check?(color)
+    king_pos = search(King, color).first
+    opposing_pieces = search(Piece, color == :white ? :black : :white)
+
+    opposing_pieces.any? do |piece|
+      self[piece].moves.include?(king_pos)
+    end
+  end
+
+  # def checkmate?(color)
+  #   return false unless in_check?(color)
+  #   own_pieces = search(Piece, color)
+  #   own_pieces.any? do |piece|
+  #     self[piece].valid_moves
+  #   end
+  # end
+
+  def search(piece_type, color)
+    found_pos = []
+
+    @grid.each_with_index do |row, row_idx|
+      row.each_with_index do |piece, col_idx|
+        if piece.is_a?(piece_type) && piece.color == color
+          found_pos << [row_idx, col_idx]
+        end
+      end
+    end
+
+    found_pos
+  end
+
   def [](pos)
     row, col = pos
     @grid[row][col]
@@ -75,8 +107,9 @@ if __FILE__ == $0
   b.move_piece([6, 3], [4, 3])
   b.move_piece([1, 4], [3, 4])
   b.move_piece([0, 1], [2, 2])
+  #b.move_piece([0, 5], [4, 1])
   d.render
-  p b[[2, 2]].moves
+  p b.in_check?(:black)
 
 
 end
