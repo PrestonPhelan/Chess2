@@ -12,7 +12,7 @@ class HumanPlayer
 
     loop do
       system("clear")
-      @display.render
+      @display.render(positions.first)
       puts "#{@name}, make a move."
       input = @display.cursor.get_input
       positions << input if input
