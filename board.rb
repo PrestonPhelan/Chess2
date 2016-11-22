@@ -137,7 +137,7 @@ end
 if __FILE__ == $0
   b = Board.new
   d = Display.new(b)
-  d.render
+  d.display_loop
 
   # d.render
   # b.move_piece([6, 5], [5, 5])
