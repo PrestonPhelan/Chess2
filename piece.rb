@@ -1,7 +1,6 @@
+require_relative 'piece_modules'
 require_relative 'board'
 require 'singleton'
-require 'byebug'
-require_relative 'piece_modules'
 
 class Piece
   attr_reader :sym, :color
@@ -22,7 +21,6 @@ class Piece
     to_s
   end
 
-
   def moves
 
   end
@@ -32,14 +30,9 @@ class Piece
   end
 
   def move_into_check?(end_pos)
-    ## Duplicate the board
-    new_board = @board.dup
-
-    ##Perform the move
-    new_board.move_piece!(@pos, end_pos)
-
-    ##See if player is in check
-    new_board.in_check?(@color)
+    new_board = @board.dup                ## Duplicate the board
+    new_board.move_piece!(@pos, end_pos)  ## Perform the move
+    new_board.in_check?(@color)           ## See if player is in check
   end
 
   def valid_moves
@@ -153,7 +146,6 @@ class Pawn < Piece
   def side_attacks
     direction = move_dirs.first
     check_pos = [[@pos[0] + direction, @pos[1]-1], [@pos[0] + direction, @pos[1]+1]]
-    #debugger
     check_pos.select do |pos|
       @board.in_bounds?(pos) && @board[pos].color == other_color
     end
