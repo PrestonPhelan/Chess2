@@ -14,12 +14,36 @@ class Piece
     @color = color
   end
 
+  def to_s
+    "#{@sym} at #{@pos}"
+  end
+
+  def inspect
+    to_s
+  end
+
+
   def moves
 
   end
 
   def other_color
     @color == :white ? :black : :white
+  end
+
+  def move_into_check?(end_pos)
+    ## Duplicate the board
+    new_board = @board.dup
+
+    ##Perform the move
+    new_board.move_piece(@pos, end_pos)
+
+    ##See if player is in check
+    new_board.in_check?(@color)
+  end
+
+  def valid_moves
+    self.moves.reject { |pos| self.move_into_check?(pos) }
   end
 end
 
