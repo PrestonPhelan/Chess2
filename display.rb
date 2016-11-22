@@ -4,6 +4,7 @@ require_relative 'board'
 require 'byebug'
 
 class Display
+  attr_reader :cursor
 
   def initialize(board)
     @board = board
@@ -32,15 +33,6 @@ class Display
 
     nil
   end
-
-  def display_loop
-    loop do
-      system("clear")
-      render
-      @cursor.get_input
-    end
-  end
-
 end
 
 if __FILE__ == $0
