@@ -7,7 +7,7 @@ class Game
     @board = Board.new
     @display = Display.new(@board)
 
-    @player1 = ComputerPlayer.new(name1, @display, :white)
+    @player1 = HumanPlayer.new(name1, @display, :white)
     @player2 = ComputerPlayer.new(name2, @display, :black)
     @current_player = @player1
   end
@@ -26,7 +26,7 @@ class Game
 
         system("clear")
         @display.render(positions[1], false, false)
-        sleep 0.25
+        sleep 1
 
         switch_players!
 
