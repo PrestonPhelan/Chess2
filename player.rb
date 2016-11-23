@@ -49,6 +49,14 @@ end
 class ComputerPlayer
   attr_reader :color
 
+  PIECE_VALUES = {
+    Pawn => 1,
+    Knight => 3,
+    Bishop => 3,
+    Rook => 5,
+    Queen => 9
+  }.freeze
+
   def initialize(name, display, color)
     @name = name
     @board = display.board
@@ -80,6 +88,7 @@ class ComputerPlayer
 
     get_all_moves.each do |k, v|
       captures[k] = v.select do |end_pos|
+        #debugger
         @board[end_pos].other_color == @color
       end
     end
@@ -103,15 +112,29 @@ class ComputerPlayer
     end
 
     captures = get_captures
-    #debugger
     if captures.empty?
       start_pos = select_piece
       end_pos = @board[start_pos].valid_moves.sample
       [start_pos, end_pos]
     else
-      start_pos = captures.keys.sample
-      end_pos = captures[start_pos].sample
-      [start_pos, end_pos]
+      capture_value = 0
+      best_capture = []
+
+      captures.each do |start_pos, arr_end_pos|
+        arr_end_pos.each do |end_pos|
+          current_value = PIECE_VALUES[@board[end_pos].class]
+          if current_value > capture_value
+            capture_value = current_value
+            best_capture = [start_pos, end_pos]
+          end
+        end
+      end
+
+      best_capture
+
+      # start_pos = captures.keys.sample
+      # end_pos = captures[start_pos].sample
+      # [start_pos, end_pos]
     end
   end
 
