@@ -38,6 +38,12 @@ class Piece
   def valid_moves
     self.moves.reject { |pos| self.move_into_check?(pos) }
   end
+
+  def winning_move?(end_pos)
+    new_board = @board.dup
+    new_board.move_piece!(@pos, end_pos)
+    new_board.checkmate?(other_color)
+  end
 end
 
 class NullPiece < Piece
