@@ -67,6 +67,24 @@ class Board
     move_piece!(start_pos, end_pos)
   end
 
+  def check_pawn_promotion
+    @grid[0].each_with_index do |piece, col|
+      if piece.is_a?(Pawn) && piece.color == :black
+        promote_pawn([0, col], :black)
+      end
+    end
+
+    @grid[7].each_with_index do |piece, col|
+      if piece.is_a?(Pawn) && piece.color == :white
+        promote_pawn([7, col], :white)
+      end
+    end
+  end
+
+  def promote_pawn(pos, color)
+    self[pos] = Queen.new(pos, self, color)
+  end
+
   def in_bounds?(pos)
     pos.all? { |coord| coord >= 0 && coord <= 7 }
   end
