@@ -152,7 +152,7 @@ end
 if __FILE__ == $0
   b = Board.new
   d = Display.new(b)
-  d.display_loop
+  #d.display_loop
 
   # d.render
   # b.move_piece([6, 5], [5, 5])
@@ -162,4 +162,11 @@ if __FILE__ == $0
   # d.render
   # p b.checkmate?(:black)
   # p b.in_check?(:black)
+  # 
+  # b.move_piece!([1, 0], [6, 0])
+  # b.move_piece!([7, 0], [4, 4])
+  # b.move_piece!([6, 0], [7, 0])
+  # d.render([0, 0], false, false)
+  # b.check_pawn_promotion
+  # d.render([0, 0], false, false)
 end
