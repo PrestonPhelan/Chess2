@@ -25,7 +25,7 @@ class Game
         @board.check_pawn_promotion
 
         system("clear")
-        @display.render(positions[1])
+        @display.render(positions[1], false, false)
         sleep 0.25
 
         switch_players!
@@ -43,10 +43,19 @@ class Game
   end
 
   def game_over?
-    return true if @board.checkmate?(:white) || @board.checkmate?(:black)
+    if @board.checkmate?(:white) || @board.checkmate?(:black)
+      winner = @board.checkmate?(:white) ? :white : :black
+      puts "Checkmate!  #{winner.capitalize} wins."
+      return true
+    end
 
     pieces_pos = @board.search(Piece, @current_player.color)
-    pieces_pos.all? { |location| @board[location].valid_moves.empty? }
+    if pieces_pos.all? { |location| @board[location].valid_moves.empty? }
+      puts "No more valid moves!  It's a stalemate."
+      return true
+    end
+
+    false
   end
 
   def switch_players!

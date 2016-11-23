@@ -11,7 +11,7 @@ class Display
     @cursor = Cursor.new([0, 0], board)
   end
 
-  def render(selected_pos)
+  def render(selected_pos, show_moves=true, show_cursor=true)
     possible_moves = @board[selected_pos].moves if selected_pos
 
     header = "  "
@@ -22,11 +22,11 @@ class Display
       print "#{row_idx} "
       row.each_with_index do |piece, col_idx|
         location = [row_idx, col_idx]
-        if @cursor.cursor_pos == location
+        if @cursor.cursor_pos == location && show_cursor
           print " #{piece.sym} ".colorize(background: :red)
         elsif selected_pos && selected_pos == location
           print " #{piece.sym} ".colorize(background: :light_red)
-        elsif selected_pos && possible_moves.include?(location)
+        elsif selected_pos && possible_moves.include?(location) && show_moves
           print " #{piece.sym} ".colorize(background: :light_red)
         elsif (row_idx + col_idx).even?
           print " #{piece.sym} "
