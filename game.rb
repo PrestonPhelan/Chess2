@@ -44,7 +44,7 @@ class Game
 
   def game_over?
     if @board.checkmate?(:white) || @board.checkmate?(:black)
-      winner = @board.checkmate?(:white) ? :white : :black
+      winner = @board.checkmate?(:white) ? :black : :white
       puts "Checkmate!  #{winner.capitalize} wins."
       return true
     end
