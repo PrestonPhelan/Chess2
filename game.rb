@@ -7,7 +7,7 @@ class Game
     @board = Board.new
     @display = Display.new(@board)
 
-    @player1 = HumanPlayer.new(name1, @display, :white)
+    @player1 = ComputerPlayer.new(name1, @display, :white)
     @player2 = ComputerPlayer.new(name2, @display, :black)
     @current_player = @player1
   end
@@ -22,10 +22,11 @@ class Game
         raise unless @board[positions[0]].color == @current_player.color
 
         @board.move_piece(positions[0], positions[1])
+        @board.check_pawn_promotion
 
         system("clear")
         @display.render(positions[1])
-        sleep 2
+        sleep 0.25
 
         switch_players!
 
