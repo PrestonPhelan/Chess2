@@ -96,6 +96,12 @@ class ComputerPlayer
   end
 
   def select_move
+    get_all_moves.each do |k, v|
+      v.each do |end_pos|
+        return [k, end_pos] if @board[k].winning_move?(end_pos)
+      end
+    end
+
     captures = get_captures
     #debugger
     if captures.empty?
