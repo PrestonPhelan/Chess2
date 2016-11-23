@@ -15,13 +15,17 @@ class Game
   def play
     until game_over?
       begin
-        # debugger
+        #debugger
 
         positions = @current_player.play_turn
 
         raise unless @board[positions[0]].color == @current_player.color
 
         @board.move_piece(positions[0], positions[1])
+
+        system("clear")
+        @display.render(positions[1])
+        sleep 2
 
         switch_players!
 
@@ -38,7 +42,10 @@ class Game
   end
 
   def game_over?
-    @board.checkmate?(:white) || @board.checkmate?(:black)
+    return true if @board.checkmate?(:white) || @board.checkmate?(:black)
+
+    pieces_pos = @board.search(Piece, @current_player.color)
+    pieces_pos.all? { |location| @board[location].valid_moves.empty? }
   end
 
   def switch_players!
