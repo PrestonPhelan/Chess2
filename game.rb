@@ -15,7 +15,7 @@ class Game
   def play
     until game_over?
       begin
-        #debugger
+        # debugger
 
         positions = @current_player.play_turn
 

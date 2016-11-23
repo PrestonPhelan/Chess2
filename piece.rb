@@ -26,6 +26,7 @@ class Piece
   end
 
   def other_color
+    return nil if self.is_a?(NullPiece)
     @color == :white ? :black : :white
   end
 
@@ -153,7 +154,7 @@ class Pawn < Piece
       double_move_pos = [@pos[0] - 2, @pos[1]]
       arr << double_move_pos if @board[double_move_pos].is_a?(NullPiece)
     end
-    
+
     arr = [] unless @board[arr.first].is_a?(NullPiece)
     side_attacks.each { |attack| arr << attack }
     arr
