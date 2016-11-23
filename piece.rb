@@ -145,6 +145,16 @@ class Pawn < Piece
 
   def moves
     arr = [[@pos[0] + move_dirs[0], @pos[1] + move_dirs[1]]]
+
+    if @pos.first == 1 && @color == :white
+      double_move_pos = [@pos[0] + 2, @pos[1]]
+      arr << double_move_pos if @board[double_move_pos].is_a?(NullPiece)
+    elsif @pos.first == 6 && @color == :black
+      double_move_pos = [@pos[0] - 2, @pos[1]]
+      arr << double_move_pos if @board[double_move_pos].is_a?(NullPiece)
+    end
+    
+    arr = [] unless @board[arr.first].is_a?(NullPiece)
     side_attacks.each { |attack| arr << attack }
     arr
   end
